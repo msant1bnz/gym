@@ -44,7 +44,6 @@ h2{margin:0;font-size:22px;line-height:1.2;font-weight:700;letter-spacing:-.01em
 .btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 16px;border:0;border-radius:16px;
   background:var(--card2);color:var(--text);font-size:16px;font-weight:500;text-decoration:none;
   transition:transform .1s ease-out,opacity .1s ease-out;touch-action:manipulation}
-.btn:active{transform:scale(.97);opacity:.85}
 .btn.primary{background:var(--accent);color:var(--accent-ink);font-weight:600;font-size:17px;min-height:56px}
 .btn.big{min-height:62px;font-size:19px;border-radius:18px}
 .btn.ghost{background:transparent;color:var(--accent);min-height:44px}
@@ -52,7 +51,6 @@ h2{margin:0;font-size:22px;line-height:1.2;font-weight:700;letter-spacing:-.01em
 .btn.danger{background:transparent;color:var(--red);min-height:40px;padding:0;justify-content:flex-start}
 .btn.sm{min-height:42px;font-size:15px;border-radius:12px;padding:0 10px;white-space:nowrap}
 .iconbtn{width:44px;height:44px;border-radius:999px;border:0;background:var(--card);display:flex;align-items:center;justify-content:center;color:var(--text)}
-.iconbtn:active{transform:scale(.94)}
 .pill{font-size:13px;font-weight:600;border-radius:999px;padding:5px 10px;background:var(--accent);color:var(--accent-ink)}
 .chips{display:flex;gap:8px;flex-wrap:wrap}
 .chip{font-size:15px;font-weight:600;border-radius:999px;padding:8px 14px;border:0;background:var(--card);color:var(--muted)}
@@ -84,7 +82,7 @@ h2{margin:0;font-size:22px;line-height:1.2;font-weight:700;letter-spacing:-.01em
 /* tab bar */
 .tabbar{position:fixed;left:0;right:0;bottom:0;height:calc(64px + var(--sab));padding-bottom:var(--sab);
   background:rgba(28,28,30,.72);-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);
-  border-top:1px solid rgba(255,255,255,.08);display:grid;grid-template-columns:repeat(3,1fr);z-index:10}
+  border-top:1px solid rgba(255,255,255,.08);display:grid;grid-template-columns:repeat(4,1fr);z-index:10}
 .tabbar button{border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:11px;color:var(--muted)}
 .tabbar button.on{color:var(--accent)}
 
@@ -115,6 +113,30 @@ label.f{display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--mu
 .chart{width:100%;height:auto;display:block}
 .toast{position:fixed;left:50%;bottom:calc(var(--sab) + 84px);transform:translateX(-50%);background:#2C2C2E;color:#fff;padding:10px 16px;border-radius:14px;font-size:15px;z-index:40;animation:fade .2s}
 
+/* respuesta al tocar (estilo iOS): se aplica al apoyar el dedo y vuelve con rebote al soltar */
+.btn,.iconbtn,.chip,.tabbar button,.cal-cell,.swatch{transition:transform .45s cubic-bezier(.34,1.56,.64,1),filter .3s ease,opacity .3s ease}
+.btn.pressed,.iconbtn.pressed,.chip.pressed{transform:scale(.96);filter:brightness(.78);transition:transform .08s ease-out,filter .08s ease-out}
+.btn.ghost.pressed,.btn.danger.pressed{transform:none;opacity:.45;filter:none}
+.tabbar button.pressed{transform:scale(.88);opacity:.7;transition:transform .08s ease-out,opacity .08s}
+.seg button{transition:background-color .2s ease,opacity .25s ease}
+.seg button.pressed{opacity:.55;transition:opacity .05s}
+.list .li{margin:0 -14px;padding-left:14px;padding-right:14px;width:calc(100% + 28px);transition:background-color .35s ease}
+.li.pressed{background-color:rgba(255,255,255,.09);transition:background-color 0s}
+.cal-cell.pressed,.swatch.pressed{transform:scale(.88);transition:transform .08s ease-out}
+
+/* calendario */
+.calgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px 4px;text-align:center}
+.calgrid .wd{font-size:12px;color:var(--muted);font-weight:600}
+.cal-cell{aspect-ratio:1;border:0;border-radius:999px;background:transparent;display:flex;align-items:center;justify-content:center;font-size:16px;font-variant-numeric:tabular-nums;color:var(--text);padding:0;max-width:46px;width:100%;justify-self:center}
+.cal-cell.on{color:#000;font-weight:700}
+.cal-cell.today{box-shadow:inset 0 0 0 2px #fff}
+.cal-cell.future{color:#48484A}
+.dot{display:inline-block;width:10px;height:10px;border-radius:999px;flex:none}
+.mini{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
+.mini i{aspect-ratio:1;border-radius:3px;background:#2C2C2E}
+.swatch{width:34px;height:34px;border-radius:999px;border:0;padding:0}
+.swatch.on{box-shadow:0 0 0 3px #000,0 0 0 5px #fff}
+
 /* transiciones entre pantallas (estilo push/pop de iOS) */
 @keyframes pushIn{from{transform:translateX(30%);opacity:0}to{transform:none;opacity:1}}
 @keyframes pushOut{from{transform:none;opacity:1}to{transform:translateX(-14%);opacity:0}}
@@ -140,6 +162,7 @@ html[data-nav=pop]::view-transition-new(root){animation:popIn .4s cubic-bezier(.
   .anim-push,.anim-pop{animation:fade .2s both}
   html[data-nav]::view-transition-old(root),html[data-nav]::view-transition-new(root){animation:none}
   .sheet.closing,.scrim.closing{animation:fadeout .15s forwards}
+  .btn.pressed,.iconbtn.pressed,.chip.pressed,.tabbar button.pressed,.cal-cell.pressed,.swatch.pressed{transform:none}
   .sheet,.scrim,.toast{animation:fade .15s}
   .btn,.iconbtn,.bar i{transition:none}
 }
@@ -300,19 +323,24 @@ function load() {
 }
 let db = load();
 if (!('active' in db)) db.active = null;
+const PALETTE = ['#FF453A', '#0A84FF', '#30D158', '#FF9F0A', '#FFD60A', '#64D2FF', '#FF375F', '#5E5CE6', '#AC8E68'];
+if (!db.config.dayColors) db.config.dayColors = { A: '#FF453A', B: '#0A84FF' };
 function save() {
   try { localStorage.setItem(KEY, JSON.stringify(db)); }
   catch (e) { toast('No se pudo guardar en el teléfono'); }
 }
 save();
 
-const ui = { tab: 'entrenar', view: null, sheet: null, dayOverride: null, prog: { ex: null, range: '6m', metric: 'e1' }, rutina: null, histOpen: null, summary: null, rest: null };
+const ui = { cal: { mode: 'mes', ref: Date.now() }, tab: 'entrenar', view: null, sheet: null, dayOverride: null, prog: { ex: null, range: '6m', metric: 'e1' }, rutina: null, histOpen: null, summary: null, rest: null };
 
 // ---------- utilidades ----------
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const kg = L.fmtKg;
 const exName = id => (db.config.exercises[id] || { name: id }).name;
 const exObj = id => db.config.exercises[id];
+const dayLabel = k => String(k).length <= 2 ? 'Día ' + k : String(k);
+const dayColor = (k, cfg) => ((cfg || db.config).dayColors || {})[k] || '#8E8E93';
+const dayDot = k => `<span class="dot" style="background:${dayColor(k)}"></span>`;
 function dur(ms) {
   ms = Math.max(0, ms); const s = Math.floor(ms / 1000), h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), r = s % 60;
   const p = n => String(n).padStart(2, '0');
@@ -321,7 +349,13 @@ function dur(ms) {
 function durWords(ms) { const m = Math.round(ms / 60000), h = Math.floor(m / 60); return h ? `${h} h ${String(m % 60).padStart(2, '0')} min` : `${m} min`; }
 function fmtDate(iso, opts) { return L.parseDate(iso).toLocaleDateString('es-CL', opts || { day: 'numeric', month: 'short' }); }
 function setTxt(st) { return st.kg == null ? `${st.reps} reps` : `${kg(st.kg)} × ${st.reps}`; }
-function ask(text, ok, fn) { ui.confirm = { text, ok, fn }; render(); }
+function ask(text, ok, fn, extra, danger) { ui.confirm = { text, ok, fn, extra, danger }; render(); }
+function doneCount() { const a = db.active; return a ? a.order.reduce((n, id) => n + a.ex[id].sets.filter(s => s.done).length, 0) : 0; }
+function discardSession() { db.active = null; ui.view = null; ui.tab = 'entrenar'; ui.rest = null; ui.nav = 'pop'; save(); render(); toast('Día cancelado'); }
+function askDiscard() {
+  const n = doneCount();
+  ask(n ? `¿Seguro? Se ${n === 1 ? 'borra la serie' : `borran las ${n} series`} de hoy y no quedan en el historial.` : '¿Cancelar el entrenamiento de hoy?', 'Sí, cancelar el día', discardSession, null, true);
+}
 function toast(msg) {
   const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t);
   setTimeout(() => t.remove(), 2200);
@@ -340,6 +374,7 @@ const icon = {
   circleOk: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#BF5AF2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>',
   train: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6.5 6.5v11M17.5 6.5v11M3 9.5v5M21 9.5v5M6.5 12h11"/></svg>',
   prog: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>',
+  cal: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>',
   hist: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>',
 };
 
@@ -382,13 +417,13 @@ function finishSession() {
 // ---------- vistas ----------
 function tabbar() {
   const b = (t, label, ic) => `<button type="button" class="${ui.tab === t ? 'on' : ''}" data-act="tab" data-t="${t}">${ic}${label}</button>`;
-  return `<nav class="tabbar">${b('entrenar', 'Entrenar', icon.train)}${b('progreso', 'Progreso', icon.prog)}${b('historial', 'Historial', icon.hist)}</nav>`;
+  return `<nav class="tabbar">${b('entrenar', 'Entrenar', icon.train)}${b('calendario', 'Calendario', icon.cal)}${b('progreso', 'Progreso', icon.prog)}${b('historial', 'Historial', icon.hist)}</nav>`;
 }
 
 function viewInicio() {
   const day = ui.dayOverride || L.nextDay(db);
   const days = Object.keys(db.config.days);
-  const other = days.find(d => d !== day);
+  const other = days.length > 1 ? days[(days.indexOf(day) + 1) % days.length] : null;
   const ids = db.config.days[day].filter(id => exObj(id));
   const nSets = ids.reduce((s, id) => s + (exObj(id).series || 1), 0);
   const ss = L.sortedSessions(db); const last = ss[ss.length - 1];
@@ -396,21 +431,21 @@ function viewInicio() {
   const month = ss.filter(s => L.sessionTime(s) >= monthStart.getTime());
   const monthRec = month.reduce((a, s) => a + (s.records || 0), 0);
   const prev = ids.slice(0, 3).map(id => { const t = L.targetFor(db, id, 0); return `<div class="row"><span>${esc(exName(id))}</span><span class="muted num">${t.kg == null ? '' : kg(t.kg) + ' kg × '}${t.reps}</span></div>`; }).join('');
-  const resume = db.active ? `<button type="button" class="btn primary" data-act="resume">Continuar entrenamiento en curso</button>` : '';
+  const resume = db.active ? `<div style="display:flex;flex-direction:column;gap:6px"><button type="button" class="btn primary" data-act="resume">Continuar entrenamiento en curso</button><button type="button" class="btn ghost" style="color:var(--red)" data-act="discard">Cancelar entrenamiento en curso</button></div>` : '';
   return `<main class="screen">
     <div><p class="eyebrow">${esc(new Date().toLocaleDateString('es-CL', { weekday: 'long', day: 'numeric', month: 'long' }))}</p><h1>Hoy toca</h1></div>
     ${resume}
     <section class="card">
-      <div class="row" style="align-items:flex-start"><div><h2 style="font-size:28px">Día ${esc(day)}</h2><span class="muted small">${ids.length} ejercicios · ${nSets} series</span></div>${ui.dayOverride ? '' : '<span class="pill">Siguiente</span>'}</div>
+      <div class="row" style="align-items:flex-start"><div><h2 style="font-size:28px;display:flex;align-items:center;gap:10px">${dayDot(day)}${esc(dayLabel(day))}</h2><span class="muted small">${ids.length} ejercicios · ${nSets} series</span></div>${ui.dayOverride ? '' : '<span class="pill">Siguiente</span>'}</div>
       <div style="display:flex;flex-direction:column;gap:10px;font-size:15px">${prev}${ids.length > 3 ? `<span class="muted">+ ${ids.length - 3} ejercicios más</span>` : ''}</div>
       ${db.active ? '' : `<button type="button" class="btn primary" data-act="start" data-day="${esc(day)}">Empezar entrenamiento</button>`}
       <div class="grid2">
-        ${other ? `<button type="button" class="btn sm" data-act="switchDay" data-day="${esc(other)}">Cambiar a Día ${esc(other)}</button>` : ''}
+        ${other ? `<button type="button" class="btn sm" data-act="switchDay" data-day="${esc(other)}">Cambiar a ${esc(dayLabel(other))}</button>` : ''}
         <button type="button" class="btn sm" data-act="openRutina" data-day="${esc(day)}">${icon.pen}Editar rutina</button>
       </div>
     </section>
     <div class="grid2">
-      <div class="stat"><span class="small muted">Último entreno</span><b>${last ? 'Día ' + esc(last.day) : '—'}</b><span class="small muted">${last ? esc(fmtDate(last.date, { weekday: 'long', day: 'numeric', month: 'short' })) : ''}${last && last.end ? ' · ' + durWords(last.end - last.start) : ''}</span></div>
+      <div class="stat"><span class="small muted">Último entreno</span><b>${last ? esc(dayLabel(last.day)) : '—'}</b><span class="small muted">${last ? esc(fmtDate(last.date, { weekday: 'long', day: 'numeric', month: 'short' })) : ''}${last && last.end ? ' · ' + durWords(last.end - last.start) : ''}</span></div>
       <div class="stat"><span class="small muted">Este mes</span><b>${month.length} sesiones</b><span class="small" style="color:var(--gold)">${monthRec ? monthRec + ' récords' : '&nbsp;'}</span></div>
     </div>
   </main>${tabbar()}`;
@@ -421,7 +456,7 @@ function headerActive() {
   const total = a.order.reduce((s, id) => s + a.ex[id].sets.length, 0), done = a.order.reduce((s, id) => s + a.ex[id].sets.filter(x => x.done).length, 0);
   return `<div class="row">
       <button type="button" class="iconbtn" data-act="home" aria-label="Volver al inicio">${icon.back}</button>
-      <div style="display:flex;flex-direction:column;align-items:center"><span style="font-size:15px;font-weight:600">Día ${esc(a.day)}</span>
+      <div style="display:flex;flex-direction:column;align-items:center"><span style="font-size:15px;font-weight:600">${esc(dayLabel(a.day))}</span>
         <span class="small muted num">Ejercicio ${Math.max(idx, 1)} de ${a.order.length} · total <span data-since="${a.start}">${dur(Date.now() - a.start)}</span></span></div>
       <button type="button" class="btn sm" style="border-radius:999px" data-act="finish">Terminar</button>
     </div>
@@ -479,7 +514,7 @@ function viewEntre() {
       <span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:13px;font-weight:600">${esc(exName(p.id))} · Serie ${p.i + 1}</span><span style="font-size:22px;font-weight:700" class="num">${setTxt(a.ex[p.id].sets[p.i].target)}</span></span>${icon.chev}</button>`
     : `<button type="button" class="btn primary" data-act="finish">Terminar el día</button>`;
   return `<main class="screen full">
-    <div class="row small muted num"><span>Día ${esc(a.day)}</span><span>Total <span data-since="${a.start}">${dur(Date.now() - a.start)}</span></span></div>
+    <div class="row small muted num"><span>${esc(dayLabel(a.day))}</span><span>Total <span data-since="${a.start}">${dur(Date.now() - a.start)}</span></span></div>
     ${banner}
     <div style="display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:20px">
       <span class="eyebrow" style="letter-spacing:.04em">Desde la última serie</span>
@@ -517,7 +552,7 @@ function viewResumen() {
       <div class="row small muted num"><span>${e.sets.map(setTxt).join(' · ')}</span><span>${e.sets.map(x => x.gap != null ? dur(x.gap) : '').join(' · ')}</span></div></div>`;
   }).join('');
   return `<main class="screen full">
-    <div><p class="eyebrow">Día ${esc(s.day)} terminado</p><h1>${durWords(s.end - s.start)}</h1><span class="muted" style="font-size:15px">Desde que empezaste hasta la última serie</span></div>
+    <div><p class="eyebrow">${esc(dayLabel(s.day))} terminado</p><h1>${durWords(s.end - s.start)}</h1><span class="muted" style="font-size:15px">Desde que empezaste hasta la última serie</span></div>
     <div class="grid3"><div class="stat"><span class="xs muted">Series</span><b>${all.length}</b></div>
       <div class="stat"><span class="xs muted">Entre series</span><b class="num">${avgGap ? dur(avgGap) : '—'}</b><span class="xs muted">promedio</span></div>
       <div class="stat"><span class="xs muted">Récords</span><b style="color:var(--gold)">${s.records || 0}</b></div></div>
@@ -572,8 +607,9 @@ function sheetAgregar() {
     <button type="button" class="btn" data-act="addTodayNew">Crear y agregar</button>`;
 }
 function renderSheet() {
-  if (!ui.sheet || !db.active) return '';
-  const body = { editar: sheetEditar, ejercicios: sheetEjercicios, agregar: sheetAgregar }[ui.sheet]();
+  if (!ui.sheet) return '';
+  if (ui.sheet !== 'dia' && !db.active) return '';
+  const body = { editar: sheetEditar, ejercicios: sheetEjercicios, agregar: sheetAgregar, dia: sheetDia }[ui.sheet]();
   return `<div class="scrim" data-act="closeSheet"></div><div class="sheet" role="dialog" aria-modal="true"><div class="grab"></div>${body}</div>`;
 }
 
@@ -605,10 +641,15 @@ function viewRutina() {
   const addable = Object.entries(cfg.exercises).filter(([id, e]) => !ids.includes(id) && !e.archivado);
   return `<main class="screen full">
     <div class="row"><button type="button" class="btn ghost" data-act="rCancel">Cancelar</button><b>Editar rutina</b><button type="button" class="btn ghost" style="font-weight:600" data-act="rSave">Guardar</button></div>
-    <div class="seg">${days.map(d => `<button type="button" class="${d === r.day ? 'on' : ''}" data-act="rDay" data-day="${esc(d)}">Día ${esc(d)}</button>`).join('')}</div>
+    <div class="seg">${days.map(d => `<button type="button" class="${d === r.day ? 'on' : ''}" data-act="rDay" data-day="${esc(d)}">${esc(dayLabel(d))}</button>`).join('')}<button type="button" data-act="rAddDay" aria-label="Agregar día">+ Día</button></div>
+    ${r.adding ? `<div class="card" style="gap:10px"><label class="f">Nombre del día nuevo<input class="field" id="rDayName" placeholder="Ej: Pierna"></label>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">${PALETTE.map(c => `<button type="button" class="swatch ${c === r.newColor ? 'on' : ''}" style="background:${c}" data-act="rNewColor" data-c="${c}" aria-label="Color ${c}"></button>`).join('')}</div>
+      <div class="grid2"><button type="button" class="btn sm" data-act="rAddDayCancel">Cancelar</button><button type="button" class="btn sm primary" style="min-height:42px;font-size:15px" data-act="rAddDayOk">Crear día</button></div></div>` : `
+    <div class="row"><span class="small muted">Color de ${esc(dayLabel(r.day))}</span><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">${PALETTE.map(c => `<button type="button" class="swatch ${c === dayColor(r.day, cfg) ? 'on' : ''}" style="background:${c};width:26px;height:26px" data-act="rColor" data-c="${c}" aria-label="Color ${c}"></button>`).join('')}</div></div>`}
     <div class="list">${rows}</div>
     ${addable.length ? `<label class="f">Agregar ejercicio existente<select class="field" data-ch="addExisting"><option value="">Elegir…</option>${addable.map(([id, e]) => `<option value="${esc(id)}">${esc(e.name)}</option>`).join('')}</select></label>` : ''}
     <div style="display:flex;gap:8px"><input class="field" id="rNew" placeholder="Nombre de ejercicio nuevo"><button type="button" class="btn tint" data-act="rAddNew">${icon.plus}Crear</button></div>
+    ${days.length > 1 ? `<button type="button" class="btn danger" style="justify-content:center" data-act="rDelDay">Eliminar ${esc(dayLabel(r.day))}</button>` : ''}
     <span class="small muted" style="text-align:center">Si cambias el nombre, el historial se mantiene.</span>
   </main>`;
 }
@@ -700,13 +741,91 @@ function chart(pts, metric) {
   return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Gráfico de progreso">${svg}</svg>${legend}`;
 }
 
+// ---------- calendario ----------
+function sessionsByDate() { const m = {}; for (const s of db.sessions) (m[s.date] = m[s.date] || []).push(s); return m; }
+function cellBg(list) {
+  const cs = [...new Set(list.map(s => dayColor(s.day)))];
+  return cs.length === 1 ? cs[0] : `linear-gradient(135deg, ${cs[0]} 50%, ${cs[1]} 50%)`;
+}
+function weekStart(d) { const x = new Date(d); x.setHours(0, 0, 0, 0); x.setDate(x.getDate() - (x.getDay() + 6) % 7); return x; }
+function periodStats(from, to, map) {
+  const now = new Date(); now.setHours(23, 59, 59, 999);
+  const end = to > now ? now : to;
+  const list = []; for (const d = new Date(from); d <= end; d.setDate(d.getDate() + 1)) (map[L.isoDate(d)] || []).forEach(s => list.push(s));
+  const by = {}; list.forEach(s => by[s.day] = (by[s.day] || 0) + 1);
+  const days = Math.max(1, Math.round((end - from) / D) + 1);
+  return { n: list.length, by, perWeek: end < from ? 0 : list.length / (days / 7) };
+}
+function viewCalendario() {
+  const c = ui.cal, map = sessionsByDate(), ref = new Date(c.ref), today = L.isoDate(new Date());
+  let title, body, from, to;
+  const cell = (d, muted) => {
+    const iso = L.isoDate(d), list = map[iso] || [], fut = iso > today;
+    const cls = `cal-cell${list.length ? ' on' : ''}${iso === today ? ' today' : ''}${fut ? ' future' : ''}`;
+    if (muted) return `<span></span>`;
+    return list.length ? `<button type="button" class="${cls}" style="background:${cellBg(list)}" data-act="calDay" data-date="${iso}" aria-label="${esc(fmtDate(iso, { day: 'numeric', month: 'long' }))}, ${list.map(s => esc(dayLabel(s.day))).join(' y ')}">${d.getDate()}</button>`
+      : `<span class="${cls}">${d.getDate()}</span>`;
+  };
+  const wd = ['L', 'M', 'M', 'J', 'V', 'S', 'D'].map(x => `<span class="wd">${x}</span>`).join('');
+  if (c.mode === 'mes') {
+    from = new Date(ref.getFullYear(), ref.getMonth(), 1); to = new Date(ref.getFullYear(), ref.getMonth() + 1, 0, 23, 59);
+    title = cap(from.toLocaleDateString('es-CL', { month: 'long', year: 'numeric' }));
+    let cells = ''; const lead = (from.getDay() + 6) % 7;
+    for (let k = 0; k < lead; k++) cells += '<span></span>';
+    for (let d = 1; d <= to.getDate(); d++) cells += cell(new Date(from.getFullYear(), from.getMonth(), d));
+    body = `<section class="card"><div class="calgrid">${wd}${cells}</div></section>`;
+  } else if (c.mode === 'semana') {
+    from = weekStart(ref); to = new Date(from); to.setDate(to.getDate() + 6); to.setHours(23, 59);
+    title = `${from.getDate()} ${from.toLocaleDateString('es-CL', { month: 'short' }).replace('.', '')} – ${to.getDate()} ${to.toLocaleDateString('es-CL', { month: 'short', year: 'numeric' }).replace('.', '')}`;
+    let rows = '';
+    for (let k = 0; k < 7; k++) {
+      const d = new Date(from); d.setDate(d.getDate() + k); const iso = L.isoDate(d), list = map[iso] || [];
+      const name = cap(d.toLocaleDateString('es-CL', { weekday: 'long' })) + ' ' + d.getDate();
+      if (!list.length) rows += `<div class="li" style="min-height:56px"><span class="dot" style="background:#2C2C2E"></span><span class="grow">${esc(name)}<span class="sub">${iso > today ? '' : 'Descanso'}</span></span>${iso === today ? '<span class="small" style="color:var(--accent)">hoy</span>' : ''}</div>`;
+      else rows += list.map(s => { const n = s.exercises.reduce((a, e) => a + e.sets.length, 0); return `<button type="button" class="li" style="min-height:56px" data-act="calDay" data-date="${iso}"><span class="dot" style="background:${dayColor(s.day)};width:12px;height:12px"></span><span class="grow">${esc(name)}<span class="sub">${esc(dayLabel(s.day))} · ${n} series${s.end ? ' · ' + durWords(s.end - s.start) : ''}</span></span>${icon.chev}</button>`; }).join('');
+    }
+    body = `<div class="list">${rows}</div>`;
+  } else {
+    const y = ref.getFullYear(); from = new Date(y, 0, 1); to = new Date(y, 11, 31, 23, 59); title = String(y);
+    let months = '';
+    for (let m = 0; m < 12; m++) {
+      const f = new Date(y, m, 1), last = new Date(y, m + 1, 0).getDate(); let dots = '', cnt = 0;
+      for (let k = 0; k < (f.getDay() + 6) % 7; k++) dots += '<i style="background:transparent"></i>';
+      for (let d = 1; d <= last; d++) { const list = map[L.isoDate(new Date(y, m, d))] || []; if (list.length) cnt += list.length; dots += `<i${list.length ? ` style="background:${cellBg(list)}"` : ''}></i>`; }
+      months += `<button type="button" class="btn" style="flex-direction:column;align-items:stretch;gap:6px;padding:10px;min-height:0;background:var(--card);border-radius:14px" data-act="calMonth" data-y="${y}" data-m="${m}">
+        <span class="row small"><b>${cap(f.toLocaleDateString('es-CL', { month: 'short' }).replace('.', ''))}</b><span class="muted">${cnt || ''}</span></span><span class="mini">${dots}</span></button>`;
+    }
+    body = `<div class="grid3">${months}</div>`;
+  }
+  const st = periodStats(from, to, map);
+  const allDays = [...new Set([...Object.keys(db.config.days), ...Object.keys(st.by)])];
+  const legend = allDays.map(k => `<span style="display:flex;align-items:center;gap:6px">${dayDot(k)}<span class="small">${esc(dayLabel(k))}</span><span class="small muted">${st.by[k] || 0}</span></span>`).join('');
+  return `<main class="screen">
+    <h1>Calendario</h1>
+    <div class="seg">${[['semana', 'Semana'], ['mes', 'Mes'], ['ano', 'Año']].map(([m, l]) => `<button type="button" class="${(c.mode === m || (m === 'ano' && c.mode === 'ano')) ? 'on' : ''}" data-act="calMode" data-m="${m}">${l}</button>`).join('')}</div>
+    <div class="row"><button type="button" class="iconbtn" data-act="calNav" data-d="-1" aria-label="Anterior">${icon.back}</button>
+      <button type="button" class="btn ghost" style="color:var(--text);font-size:19px;font-weight:700" data-act="calToday">${esc(title)}</button>
+      <button type="button" class="iconbtn" data-act="calNav" data-d="1" aria-label="Siguiente" style="transform:scaleX(-1)">${icon.back}</button></div>
+    ${body}
+    <div class="grid2"><div class="stat"><span class="small muted">Entrenamientos</span><b>${st.n}</b></div><div class="stat"><span class="small muted">Por semana</span><b>${st.n ? String(L.round1(st.perWeek)).replace('.', ',') : '0'}</b><span class="xs muted">promedio</span></div></div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap">${legend}</div>
+  </main>${tabbar()}`;
+}
+function sheetDia() {
+  const list = db.sessions.filter(s => s.date === ui.sheetDate);
+  const body = list.map(s => `<div class="card" style="background:var(--card2);gap:8px">
+      <div class="row"><b style="display:flex;align-items:center;gap:8px">${dayDot(s.day)}${esc(dayLabel(s.day))}</b><span class="small muted">${s.end ? durWords(s.end - s.start) : ''}${s.records ? ` · <span style="color:var(--gold)">${s.records} récords</span>` : ''}</span></div>
+      ${s.exercises.map(e => `<div class="row small"><span>${esc(exName(e.id))}</span><span class="muted num">${e.sets.map(setTxt).join(' · ')}</span></div>`).join('')}</div>`).join('');
+  return `<div class="row"><span style="width:64px"></span><b>${esc(cap(fmtDate(ui.sheetDate, { weekday: 'long', day: 'numeric', month: 'long' })))}</b><button type="button" class="btn ghost" data-act="closeSheet">Listo</button></div>${body}`;
+}
+
 // ---------- historial y respaldo ----------
 function viewHistorial() {
   const ss = L.sortedSessions(db).reverse();
   const rows = ss.slice(0, ui.histMore ? ss.length : 40).map(s => {
     const n = s.exercises.reduce((a, e) => a + e.sets.length, 0);
     const open = ui.histOpen === s.id;
-    return `<button type="button" class="li" data-act="hOpen" data-id="${esc(s.id)}"><span class="grow">${esc(fmtDate(s.date, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }))} · Día ${esc(s.day)}<span class="sub">${s.exercises.length} ejercicios · ${n} series${s.end ? ' · ' + durWords(s.end - s.start) : ''}${s.records ? ` · <span style="color:var(--gold)">${s.records} récords</span>` : ''}</span></span>${icon.chev}</button>
+    return `<button type="button" class="li" data-act="hOpen" data-id="${esc(s.id)}">${dayDot(s.day)}<span class="grow">${esc(fmtDate(s.date, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }))} · ${esc(dayLabel(s.day))}<span class="sub">${s.exercises.length} ejercicios · ${n} series${s.end ? ' · ' + durWords(s.end - s.start) : ''}${s.records ? ` · <span style="color:var(--gold)">${s.records} récords</span>` : ''}</span></span>${icon.chev}</button>
       ${open ? `<div style="padding:4px 0 12px;display:flex;flex-direction:column;gap:6px">${s.exercises.map(e => `<div class="row small"><span>${esc(exName(e.id))}</span><span class="muted num">${e.sets.map(setTxt).join(' · ')}</span></div>`).join('')}
         <button type="button" class="btn danger" data-act="hDel" data-id="${esc(s.id)}">Borrar esta sesión</button></div>` : ''}`;
   }).join('');
@@ -744,13 +863,14 @@ function render() {
   else if (ui.view === 'resumen') html = viewResumen();
   else if (ui.tab === 'entrenar' && db.active && ui.view === 'serie') html = viewSerie();
   else if (ui.tab === 'entrenar' && db.active && ui.view === 'entre') html = viewEntre();
+  else if (ui.tab === 'calendario') html = viewCalendario();
   else if (ui.tab === 'progreso') html = viewProgreso();
   else if (ui.tab === 'historial') html = viewHistorial();
   else html = viewInicio();
   const key = screenKey();
   const nav = lastKey !== null && key !== lastKey ? (ui.nav || 'fade') : null;
   ui.nav = null; lastKey = key;
-  const full = html + renderSheet() + (ui.confirm ? `<div class="scrim" data-act="cNo"></div><div class="sheet" role="alertdialog" aria-modal="true" style="z-index:30"><div class="grab"></div><p style="margin:4px 0;font-size:17px;text-align:center">${esc(ui.confirm.text)}</p><button type="button" class="btn primary" data-act="cOk">${esc(ui.confirm.ok)}</button><button type="button" class="btn" data-act="cNo">Cancelar</button></div>` : '');
+  const full = html + renderSheet() + (ui.confirm ? `<div class="scrim" data-act="cNo"></div><div class="sheet" role="alertdialog" aria-modal="true" style="z-index:30"><div class="grab"></div><p style="margin:4px 0;font-size:17px;text-align:center">${esc(ui.confirm.text)}</p>${ui.confirm.ok ? `<button type="button" class="btn ${ui.confirm.danger ? '' : 'primary'}" ${ui.confirm.danger ? 'style="color:var(--red);font-weight:600"' : ''} data-act="cOk">${esc(ui.confirm.ok)}</button>` : ''}${ui.confirm.extra ? `<button type="button" class="btn" style="color:var(--red)" data-act="cExtra">${esc(ui.confirm.extra.label)}</button>` : ''}<button type="button" class="btn" data-act="cNo">${ui.confirm.extra ? 'Seguir entrenando' : 'No'}</button></div>` : '');
   const vt = nav && document.startViewTransition && !reduceMotion();
   const apply = () => {
     $app.innerHTML = full;
@@ -785,7 +905,9 @@ const act = {
   goSerie: () => { ui.nav = 'push'; ui.view = 'serie'; },
   wheel: d => { const s = document.getElementById('w-' + d.w); if (!s) return false; const n = s.selectedIndex + (+d.d); const max = s.options.length - 1; if (n >= 0 && n <= max) s.selectedIndex = n; return false; },
   saveEdit: () => { const k = document.getElementById('w-kg'), r = document.getElementById('w-reps'), o = document.getElementById('w-kg-other'); const ov = o && o.value ? parseFloat(o.value.replace(',', '.')) : NaN; saveSet(!isNaN(ov) ? ov : (k ? parseFloat(k.value) : null), parseInt(r.value, 10)); return false; },
-  finish: () => { if (pending()) ask('Quedan series sin hacer. ¿Terminar el día igual?', 'Terminar', finishSession); else finishSession(); return false; },
+  finish: () => { const n = doneCount(); ask(pending() ? (n ? 'Quedan series sin hacer. ¿Qué quieres hacer?' : 'Aún no registras ninguna serie. ¿Qué quieres hacer?') : '¿Terminar el día?', n ? 'Guardar y terminar' : null, finishSession, { label: 'Cancelar día sin guardar', fn: askDiscard }); return false; },
+  cExtra: () => { const f = ui.confirm.extra.fn; ui.confirm = null; f(); return false; },
+  discard: () => { askDiscard(); return false; },
   cOk: () => { const f = ui.confirm.fn; ui.confirm = null; f(); return false; },
   cNo: () => { closeSheetThen(() => { ui.confirm = null; }); return false; },
   addToday: d => { ui.nav = 'push'; const a = db.active; a.order.push(d.id); a.ex[d.id] = { sets: Array.from({ length: exObj(d.id).series || 1 }, (_, i) => ({ target: L.targetFor(db, d.id, i), done: null })) }; a.cur = { id: d.id, i: 0 }; ui.sheet = null; ui.view = 'serie'; save(); },
@@ -800,10 +922,21 @@ const act = {
   rCancel: () => { ui.nav = 'pop'; ui.view = ui.rutina.back === 'rutina' ? null : ui.rutina.back; ui.rutina = null; },
   rSave: () => { ui.nav = 'pop'; db.config = ui.rutina.draft; syncActiveWithConfig(); save(); ui.view = ui.rutina.back; ui.rutina = null; toast('Rutina guardada'); },
   prog: d => { ui.prog[d.k] = d.v; },
+  calMode: d => { ui.cal.mode = d.m; },
+  calNav: d => { const r = new Date(ui.cal.ref), k = +d.d; if (ui.cal.mode === 'mes') { r.setDate(1); r.setMonth(r.getMonth() + k); } else if (ui.cal.mode === 'semana') r.setDate(r.getDate() + 7 * k); else r.setFullYear(r.getFullYear() + k); ui.cal.ref = r.getTime(); },
+  calToday: () => { ui.cal.ref = Date.now(); },
+  calMonth: d => { ui.cal.mode = 'mes'; ui.cal.ref = new Date(+d.y, +d.m, 1).getTime(); },
+  calDay: d => { ui.sheetDate = d.date; ui.sheet = 'dia'; },
+  rAddDay: () => { ui.rutina.adding = true; const used = Object.values(ui.rutina.draft.dayColors || {}); ui.rutina.newColor = PALETTE.find(c => !used.includes(c)) || PALETTE[2]; },
+  rAddDayCancel: () => { ui.rutina.adding = false; },
+  rNewColor: d => { ui.rutina.newColor = d.c; const v = document.getElementById('rDayName')?.value; render(); if (v) document.getElementById('rDayName').value = v; return false; },
+  rAddDayOk: () => { const name = (document.getElementById('rDayName').value || '').trim(); const cfg = ui.rutina.draft; if (!name) return false; if (cfg.days[name]) { toast('Ese día ya existe'); return false; } cfg.days[name] = []; cfg.dayColors = { ...(cfg.dayColors || {}), [name]: ui.rutina.newColor }; ui.rutina.day = name; ui.rutina.adding = false; },
+  rColor: d => { const cfg = ui.rutina.draft; cfg.dayColors = { ...(cfg.dayColors || {}), [ui.rutina.day]: d.c }; },
+  rDelDay: () => { const day = ui.rutina.day; if (db.active && db.active.day === day) { toast('Ese día está en curso'); return false; } ask(`¿Eliminar ${dayLabel(day)} de la rutina? Las sesiones pasadas se mantienen en el historial.`, 'Eliminar', () => { const cfg = ui.rutina.draft; delete cfg.days[day]; ui.rutina.day = Object.keys(cfg.days)[0]; render(); }, null, true); return false; },
   progPick: d => { ui.prog.ex = d.id; window.scrollTo({ top: 0, behavior: 'smooth' }); },
   hOpen: d => { ui.histOpen = ui.histOpen === d.id ? null : d.id; },
   hMore: () => { ui.histMore = true; },
-  hDel: d => { ask('¿Borrar esta sesión del historial?', 'Borrar', () => { db.sessions = db.sessions.filter(s => s.id !== d.id); save(); render(); }); return false; },
+  hDel: d => { ask('¿Borrar esta sesión del historial?', 'Borrar', () => { db.sessions = db.sessions.filter(s => s.id !== d.id); save(); render(); }, null, true); return false; },
   expJson: () => { download(`gym-respaldo-${L.isoDate(new Date())}.json`, JSON.stringify(db), 'application/json'); return false; },
   expCsv: () => { exportCsv(); return false; },
 };
@@ -828,6 +961,18 @@ const ch = {
   },
 };
 document.addEventListener('change', ev => { const el = ev.target.closest('[data-ch]'); if (el && ch[el.dataset.ch]) ch[el.dataset.ch](el); });
+
+// Respuesta al tocar: se marca al apoyar el dedo (no al soltar) y se suelta si el dedo se desliza
+const PRESSABLE = '.btn,.iconbtn,.chip,.seg button,.tabbar button,.li,.cal-cell,.swatch';
+let pressed = null, pressXY = null;
+const release = () => { if (pressed) { pressed.classList.remove('pressed'); pressed = null; } };
+document.addEventListener('pointerdown', e => {
+  const el = e.target.closest(PRESSABLE); if (!el || el.disabled || el.tagName === 'SPAN' || (el.classList.contains('li') && !el.dataset.act && !el.querySelector('[data-act]'))) return;
+  release(); pressed = el; pressXY = [e.clientX, e.clientY]; el.classList.add('pressed');
+}, { passive: true });
+document.addEventListener('pointermove', e => { if (pressed && pressXY && Math.hypot(e.clientX - pressXY[0], e.clientY - pressXY[1]) > 10) release(); }, { passive: true });
+['pointerup', 'pointercancel', 'scroll'].forEach(t => document.addEventListener(t, () => setTimeout(release, 0), { passive: true, capture: true }));
+
 if (db.active) ui.view = 'serie';
 render();
 if ('serviceWorker' in navigator && location.protocol === 'https:' && !location.hostname.endsWith('claude.ai') && !location.hostname.includes('claudeusercontent')) {
